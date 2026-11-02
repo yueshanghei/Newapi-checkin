@@ -54,3 +54,7 @@ lottery_bindings.json
 # 本地环境与日志
 .venv/
 logs/
+
+# 浏览器临时目录
+ts_solver_*/
+.tmp/
