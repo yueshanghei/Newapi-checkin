@@ -50,3 +50,7 @@ lottery_bindings.json
 # 鏃ュ織
 *.log
 鎺ュ彛.md
+
+# 本地环境与日志
+.venv/
+logs/

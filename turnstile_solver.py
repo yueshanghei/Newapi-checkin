@@ -93,6 +93,10 @@ SOLVE_JS_POLL = '''() => ({
 
 
 def find_chrome():
+    # 运行时可覆盖（.env 是在模块导入后才加载的，所以这里每次调用都重新读环境变量）
+    override = os.environ.get('TURNSTILE_CHROME_PATH')
+    if override and os.path.exists(override):
+        return override
     for path in CHROME_CANDIDATES:
         if path and os.path.exists(path):
             return path
@@ -145,7 +149,14 @@ def _launch_chrome(proxy=None, url=None):
         '--disable-gpu',
         '--remote-allow-origins=*',
         '--window-size=700,500',
+        # Edge 默认开启「跟踪防护」，会拦截 challenges.cloudflare.com 的 storage，
+        # 导致 Turnstile 组件报 "No available adapters" 拿不到 token
+        '--disable-features=msTrackingPrevention,msSmartScreenProtection,TrackingPrevention',
     ]
+    # 允许通过环境变量追加浏览器参数（如指定 Edge、额外开关）
+    extra_args = os.environ.get('TURNSTILE_EXTRA_ARGS', '')
+    if extra_args:
+        args.extend(a.strip() for a in extra_args.split(',') if a.strip())
     if proxy:
         args.append(f'--proxy-server={proxy}')
     args.append(url or 'about:blank')

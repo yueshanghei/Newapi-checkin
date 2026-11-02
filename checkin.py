@@ -346,7 +346,8 @@ class NewAPICheckin:
                 else:
                     message = data.get('message', '签到失败')
                     already_keywords = ['已签到', '已经签到', 'already', '重复签到']
-                    already_checked_in = any(k in message for k in already_keywords)
+                    # 站点可能回英文（如 "Already checked in today"），统一转小写比较
+                    already_checked_in = any(k in message.lower() for k in already_keywords)
                     if already_checked_in:
                         result['success'] = True
                         result['message'] = message
@@ -454,7 +455,7 @@ class NewAPICheckin:
 
         message = resp_data.get('message', '签到失败')
         already_keywords = ['已签到', '已经签到', 'already', '重复签到']
-        if resp_data.get('success') or any(k in message for k in already_keywords):
+        if resp_data.get('success') or any(k in message.lower() for k in already_keywords):
             result['success'] = True
             result['message'] = f'{message} (Turnstile)'
             checkin_data = resp_data.get('data', {})
