@@ -89,10 +89,12 @@ def run_one(account: dict, verbose: bool = False) -> dict:
     started = time.time()
     info = client.get_user_info(verbose=verbose)
     if not info:
-        return {"name": name, "url": url, "success": False, "message": "获取用户信息失败（认证无效）"}
-
-    print(f"  用户: {info.get('username')}  余额: {info.get('quota', 0) / 500000:.2f}  "
-          f"已用: {info.get('used_quota', 0) / 500000:.2f}")
+        # 个别站点（如 hkkkj）会用 Cloudflare 拦 requests 的 GET，
+        # 但 checkin() 内部有 CF 绕过分支，所以这里不直接判失败
+        print("  ⚠️ 获取用户信息失败（可能被 Cloudflare 拦），继续尝试签到 ...")
+    else:
+        print(f"  用户: {info.get('username')}  余额: {info.get('quota', 0) / 500000:.2f}  "
+              f"已用: {info.get('used_quota', 0) / 500000:.2f}")
 
     result = client.checkin()
     return {
@@ -102,10 +104,10 @@ def run_one(account: dict, verbose: bool = False) -> dict:
         "message": result.get("message", ""),
         "checkin_date": result.get("checkin_date"),
         "quota_awarded": result.get("quota_awarded"),
-        "quota": info.get("quota"),
-        "used_quota": info.get("used_quota"),
-        "bonus_quota": info.get("bonus_quota"),
-        "user": info.get("username"),
+        "quota": (info or {}).get("quota"),
+        "used_quota": (info or {}).get("used_quota"),
+        "bonus_quota": (info or {}).get("bonus_quota"),
+        "user": (info or {}).get("username"),
         "elapsed": round(time.time() - started, 1),
     }
 
