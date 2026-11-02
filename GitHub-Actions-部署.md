@@ -1,4 +1,14 @@
-# 把签到搬到 GitHub Actions
+﻿# 把签到搬到 GitHub Actions
+
+> **状态：已部署并跑通**（2026-11-02 10:20）
+>
+> - 仓库：<https://github.com/yueshanghei/Newapi-checkin>（**public** fork，如果你想私有可以改）
+> - Workflow：[`checkin-local.yml`](../.github/workflows/checkin-local.yml)，定时 `0 1 * * *`（北京 9:00）
+> - Secrets：`NEWAPI_ACCOUNTS`、`EMAIL_USER`、`EMAIL_PASS`、`EMAIL_TO`、`EMAIL_SMTP_HOST`、`EMAIL_SMTP_PORT` 均已写入
+> - 最近一次运行 **4/5 成功**：catcat ✅、gemai ✅、hkkkj ✅、hcnsec ✅，thousandyuan ❌（站点 530）
+> - 本地 Windows 定时任务已 `Disable-ScheduledTask` 停用，避免一天跑两次触发 429
+>
+> 下面是完整的从零操作步骤（换账号/换仓库时照做）。
 
 本地这套（Windows 任务计划程序）和 GitHub Actions 用的是**同一份代码**，
 差别只是「配置从哪来」和「浏览器怎么跑」。仓库里已经放好 workflow：
@@ -59,9 +69,9 @@ git push -u origin main
 | Secret 名 | 值 |
 | --- | --- |
 | `NEWAPI_ACCOUNTS` | 本地 `.env` 里 `NEWAPI_ACCOUNTS=` 后面**整段 JSON**（一行） |
-| `EMAIL_USER` | `179711956@qq.com` |
+| `EMAIL_USER` | `你的邮箱@qq.com` |
 | `EMAIL_PASS` | QQ 邮箱 SMTP 授权码（就是 `.env` 里那串 16 位） |
-| `EMAIL_TO` | `179711956@qq.com` |
+| `EMAIL_TO` | `你的邮箱@qq.com` |
 
 可选：
 
@@ -69,7 +79,7 @@ git push -u origin main
 | --- | --- | --- |
 | `EMAIL_SMTP_HOST` | `smtp.qq.com` | 不填代码里默认就是它 |
 | `EMAIL_SMTP_PORT` | `465` | 不填默认 465 |
-| `EMAIL_FROM` | `179711956@qq.com` | 不填等于 EMAIL_USER |
+| `EMAIL_FROM` | `你的邮箱@qq.com` | 不填等于 EMAIL_USER |
 
 `NEWAPI_ACCOUNTS` 直接用本地这份（把密码换成真实的）：
 
@@ -97,7 +107,7 @@ git push -u origin main
 ✅ hcnsec: Check-in successful (Turnstile)  +$16.87
 ❌ thousandyuan: 获取用户信息失败（认证无效）
 成功 4/5
-[邮件] 已发送至 179711956@qq.com
+[邮件] 已发送至 你的邮箱@qq.com
 ```
 
 同时会收到邮件；页面底部 **Artifacts** 里还能下载 `checkin-log-N`（保留了 `tee` 出来的完整日志）。

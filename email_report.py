@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 签到结果邮件通知
@@ -8,7 +8,7 @@
     EMAIL_SMTP_PORT=465             # 465 = SSL，587 = STARTTLS
     EMAIL_USER=xxx@qq.com           # 发件邮箱（登录名）
     EMAIL_PASS=xxxxxxxxxxxx         # QQ 邮箱「授权码」，不是登录密码
-    EMAIL_TO=179711956@qq.com       # 收件人，多个用逗号分隔
+    EMAIL_TO=你的邮箱@qq.com       # 收件人，多个用逗号分隔
     EMAIL_FROM=xxx@qq.com           # 可选，默认同 EMAIL_USER
 """
 from __future__ import annotations
