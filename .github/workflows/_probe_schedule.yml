@@ -1,0 +1,13 @@
+name: 定时触发器探针
+on:
+  schedule:
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 记录时间
+        run: |
+          echo "probe fired at $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          echo "event=$GITHUB_EVENT_NAME"
